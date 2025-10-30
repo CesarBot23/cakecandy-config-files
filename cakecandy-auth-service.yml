@@ -5,9 +5,9 @@ spring:
   application:
     name: cakecandy-auth-service
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:3306/cakebd?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ${DB_USER:root}
-    password: ${DB_PASS:mysql}
+    url: jdbc:mysql://host.docker.internal:3306/cakebd?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: mysql
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,11 +15,11 @@ spring:
 
 eureka:
   client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
     register-with-eureka: true
     fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
 
 jwt:
-  secret: c4k3c4ndy-super-secret
+  secret: myjwtsecret12345
   expiration-ms: 3600000
