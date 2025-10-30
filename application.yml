@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: global-config
+  datasource:
+    url: jdbc:mysql://host.docker.internal:3306/cakebd
+    username: root
+    password: mysql
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 5555
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    hostname: config-server
+    prefer-ip-address: true
+
+logging:
+  file:
+    name: ${spring.application.name}.log
+  level:
+    root: INFO
+
+app:
+  queue:
+    name: log-queue
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      adminCB:
+        register-health-indicator: true
+        sliding-window-type: count-based
+        sliding-window-size: 9
+        minimum-number-of-calls: 3
+        failure-rate-threshold: 60
+        max-wait-duration-in-half-open-state: 21s
+        permitted-number-of-calls-in-half-open-state: 3
+  retry:
+    instances:
+      adminCB:
+        max-attempts: 6
+        wait-duration: 1s
